@@ -1,0 +1,254 @@
+
+Classes:
+
+Template definition of the method(s) and variable(s) in a particular kind of object.
+So Object is an instance of class which contains variables and methods.
+In Scala class is not declared public as by default it is public
+
+scala> class Ctr {
+private var value = 0 //fields must be initialized
+def incr() {value += 1}
+def curr() = value
+}
+
+object Code27 {
+  def main(args: Array[String]){
+  //classes are used as blue prints to created real world objects ,objects define attributes  which are called fields in OO world
+  //& capabilities of those objects which are called methods
+  //usually created outside main
+  
+  val wolf = new Animal
+  wolf.setName("wolf")
+  wolf.setSound("woo")
+  printf("%s says %s\n", wolf.getName, wolf.getSound)
+  } //end of main
+  
+  //define class and default constructors
+  class Animal(var name: String, var sound: String){
+  this.setName(name)
+  
+  //usually in scala we dont have static variables and methods,but we can create as below
+  val id = Animal.newIdNum
+
+  //define getters and setters to protect data
+  def getName() : String = name
+  def getSound() : String = sound
+  
+  def setName(name: String){
+  //if name doesnt contain any numbers of decimals
+  if(!(name.matches(".*\\d+.*")))
+	this.name = name
+  else
+        this.name = "No name"
+  }
+  
+  def setSound(sound: String){
+  this.sound = sound
+  }
+
+  //creating other constructors,using this (which is a constructor in scala)
+  def this(name: String){
+  this("No name","No sound")
+  this.setName(name)
+  }
+
+  def this(){
+  this("No name","No sound")
+  }
+
+  //to override a method
+  //a method available with every object we create, in scala to override is toString
+  override def toString() : String = {
+  return "%s with the id %d says %s".format(this.name,this.id,this.sound)
+  }
+  }
+
+  //create a companion object for class to find static variables and functions
+  object Animal {
+  private var idNumber = 0
+  //creating static function
+  private def newIdNum = { idNumber += 1;idNumber}
+  }
+  
+  }
+====================
+//Add the following in main in above code
+val whiskers = new Animal("Whiskers","Meow")
+println(s"${whiskers.getName} with id ${whiskers.id} says ${whiskers.sound}")
+
+ or
+
+println(whiskers.toString)
+============================
+Inheritance:
+
+refer code28.scala
+//class that inherits from another gets all from the class that it is inheriting from,
+//ie all fields and methods defined in animal in our case
+//that can't happen only if class was declared as final
+//so if you dont want a class to be inherited from, declare it as final
+
+//Lets create a new class
+class Dog(name: String,sound: String, growl: String) extends Animal(name,sound){
+ def this(name: String, sound: String){
+ this("No name",sound,"No growl")
+ this.setName(name)
+}
+ def this(name: String){
+ this("No name","No Sound","No Growl")
+ this.setName(name) 
+}
+ def this(){
+ this("No name","No Sound","No Growl")
+}
+ override def toString() : String = {
+  return "%s with the id %d says %s or %s".format(this.name,this.id,this.sound,this.growl)
+  }  
+}
+
+//add this in main of previous code to test
+val spike = new Dog("Spike","woof","Grrr")
+spike.setName("Spike")
+println(spike.toString)
+===========
+Abstract class:
+
+//cannot be instantiated (ie create an object from)
+//is made up of abstract and non abstract mthods
+
+object Code29 {
+  def main(args: Array[String]){
+  val fang = new Tiger ("fang")
+  fang.moveSpeed = 36.0
+  println(fang.move)
+
+ } //end of main
+abstract class Mammal (val name: String){
+ var moveSpeed : Double //abstract field that doesnt have a value assigned to it  
+  
+ def move: String //abstract method which defines only paramters it gets, however it doesnt get any 
+ }
+  //create another class
+  class Tiger(name: String) extends Mammal(name) {
+  var moveSpeed = 35.0
+  def move = "the Tiger %s runs %.2f mph".format(this.name,this.moveSpeed)  
+}
+ }
+=============
+Traits:
+Similar to Java interface using which a class can extend more than one.
+we cannot extend multiple classes or multiple abstract classes but we can extend multiple traits.
+unlike Java ,traits can provide concrete methods & fields.
+
+
+object Code30 {
+   def main(args: Array[String]){
+  val superman = new Superhero("Superman")
+  println(superman.fly)
+  println(superman.hitByBullet)
+  println(superman.ricochet(2500))
+ } //end of main
+    trait Flyable {
+    def fly: String 
+ }
+    trait BulletProof{
+    def hitByBullet : String 
+    
+   //def concrete classes
+     def ricochet(startSpeed: Double): String = {
+      "the bullet ricochets at a speed of %.1f ft/sec".format(startSpeed * .75) 
+  } 
+}
+    //using traits to create another class
+    class Superhero(val name: String) extends Flyable with BulletProof {
+    def fly = "%s flys through the air".format(this.name)
+    def hitByBullet = "The bullet bounces off of %s".format(this.name)    
+}
+}
+}
+========================================
+Higher Order functions:
+import scala.math._
+object Code31 {
+   def main(args: Array[String]){
+	
+     val log10Func = log10 _  //use underscore to show its a function,and fn can be used to store
+     println(log10Func(1000))
+
+     //Apply a function to all items of a list
+     List(100.0,1000.0).map(log10Func).foreach(println)
+     List(1,2,3,4,5).map((x: Int) => x * 50 ).foreach(println)
+     List(1,2,3,4,5).filter(_ % 2 == 0 ).foreach(println)
+
+//passing functions to different functions
+     def times2(num: Int) = num * 2
+     def times20(num: Int) = num * 20
+
+     def multIt(func: (Int) => Double, num : Int) = {
+     func(num)
+     }
+     printf("3 * 100 = %.1f\n", multIt(times2, 100)) 
+ //Closure: A function that depends on variables defined outside the function
+     val divisorVal = 5
+     val divisor5 = (num: Double) => num/divisorVal
+     println("5/5= " + divisor5(5.0))
+
+}// End of Main
+} //End of Object[Code31]
+================
+
+File IO:
+import java.io.PrintWriter
+import scala.io.Source
+
+object Code32 {
+   def main(args: Array[String]){
+
+   //writing to a file
+	val writer = new PrintWriter("sample.txt")
+   writer.write("some non imp data\nbut not to be ignored")
+   writer.close()
+
+   //reading from a file
+   val textFromFile = Source.fromFile("sample.txt", "UTF-8")
+    //iterating over lines of text
+    val lineIterator = textFromFile.getLines
+    for(line <- lineIterator)
+    println(line)
+
+   textFromFile.close()
+}// End of Main
+} //End of Object[Code32]
+=============
+Exception handling
+
+import java.io.PrintWriter
+import scala.io.Source
+
+object Code33 {
+   def main(args: Array[String]){
+
+   def divideNums(num1: Int, num2: Int) = try 
+   {
+    (num1/num2)
+   } catch {
+     case ex : java.lang.ArthimeticException => "can't dvide by zero"
+  }  finally {
+     //cleanup after exception    
+}
+
+    println("3 / 0 = " + divideNums(0,3))
+}// End of Main
+} //End of Object[Code33]
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,3 +1,22 @@
+if file on client node (ie where you intend to submit spark application using spark-submit)
+Note** your code should point to file as shown
+val x = sc.textFile(file:///<file path>)
+
+if file on hadoop cluster  ie on HDFS
+option 1: 
+Note** your code should point to file as shown
+val x = sc.textFile(hdfs://namenodehostname:port/directory/yourfile)
+
+option 2:
+Note** your code should point to file as shown
+val x = sc.textFile(/directory/yourfile)
+
+option 3:
+Note** your code should point to file as shown
+here directory is in default location ie on hdfs --> under /user/usernamedirectory/
+val x = sc.textFile(directory/yourfile)
+
+
 Download the jar file from here : simple-project_2.11-1.1.0.jar
 <link>
 
