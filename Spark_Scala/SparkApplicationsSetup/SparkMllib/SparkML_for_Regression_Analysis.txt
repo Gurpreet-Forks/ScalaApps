@@ -112,11 +112,11 @@ import org.apache.spark.mlib.linalg.{Vector, Vectors}
 
 def getDoubleValue( input: String) : Double = {
     var result:Double = 0.0
-    if ((input == "P") result =  3.0
-    if ((input == "A") result =  2.0
-    if ((input == "N") result =  1.0
-    if ((input == "NB") result = 1.0
-    if ((input == "B") result =  0.0
+    if (input == "P") result =  3.0
+    if (input == "A") result =  2.0
+    if (input == "N") result =  1.0
+    if (input == "NB") result = 1.0
+    if (input == "B") result =  0.0
     return result
     }
 
